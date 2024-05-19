@@ -8,46 +8,81 @@ theme:
     footer:
       style: empty
 title: Project Carvel
-sub_title: Composable Tools for Application Management
+sub_title: Small tools for joyful k8s deployments
 author: Daniel Garnier-Moiroux
 ---
 
 Daniel Garnier-Moiroux
 ===
 
-## Daniel Garnier-Moiroux
+Software Engineer @ Broadcom
 
-Software engineer @ Broadcom, Tanzu-Spring
+- 🍃 Spring
+- 🚢 Tanzu Application Platform
 
+<!-- new_lines: 1 -->
 🧑‍💻Carvel user
 
 <!-- new_lines: 1 -->
 On the web:
 
-🐦️ @kehrlann
-
-🐘️ @kehrlann@hachyderm.io
-
-🐙️ github.com/Kehrlann
-
-🌍️ https://garnier.wf
+- 🐦️ @kehrlann
+- 🐘️ @kehrlann@hachyderm.io
+- 🐙️ github.com/Kehrlann
+- 🌍️ https://garnier.wf
+- 📩️ contact@garnier.wf
 
 <!-- end_slide -->
 
-On the menu
+Disclaimer 📄
 ===
 
-- What's **carvel**?
-    - https://carvel.dev
+🔭   This is an overview, very partial
+
+🏎️💨 A lot of content, this may go a bit fast (sorry)
+
+🧑‍💻 I'm more of a "Developer", not much of an "Operator"
+
+<!-- end_slide -->
+
+
+The plan
+===
+
+1. **What's Carvel?**
+1. Create some YAML with `ytt`
+1. Deploy it with `kapp`
+1. Make it prod-ready and publish it with `kbld` and `imgpkg`
+1. GitOps and Package Management with `kapp-controller` and `kctrl`
+
+<!-- end_slide -->
+
+
+What's carvel?
+===
+
+🏖️ CNCF **Sandbox** project
+
+> ‌
+> Carvel provides a set of reliable, single-purpose,
+> composable tools that aid in your application building,
+> configuration, and deployment to Kubernetes.
+> ‌
 
 <!-- new_lines: 1 -->
+⏩ https://carvel.dev/
 
-- The tools:
-    - .           **ytt**   YAML templating and manipulation
-    - .          **kapp**   Friendlier `kubectl`
-    - .          **kbld**   Resolve image names to their SHA sums
-    - .        **imgpkg**   Package config files as an OCI image
-    - **kapp-controller**   Compose these tools together for "GitOps"
+<!-- end_slide -->
+
+
+The plan
+===
+
+1. What's Carvel?
+1. **Create some YAML with `ytt`**
+1. Deploy it with `kapp`
+1. Make it prod-ready and publish it with `kbld` and `imgpkg`
+1. GitOps and Package Management with `kapp-controller` and `kctrl`
 
 <!-- end_slide -->
 
@@ -63,11 +98,84 @@ Any YAML, not just Kubernetes resources!
 
 <!-- new_lines: 1 -->
 
-## Substitute for Helm and Kustomize
+## Substitute for `helm template`
 
-Can be combined with both tools
+- Control flow (for, if)
+- Functions
+- Data values
 
 <!-- end_slide -->
+
+
+Let's make some YAML!
+===
+
+```
+  ┌──────────────────────┐          ┌────────────────────────────┐
+  │ Deployment           │          │ Service                    │
+  │                      │          │                            │
+  │   image: nginx       ◄──────────┤                            │
+  │                      │          │                            │
+  └──────────┬───────────┘          └────────────▲───────────────┘
+             │                                   │
+  ┌──────────▼───────────┐          ┌────────────┴───────────────┐
+  │ ConfigMap            │          │ Ingress                    │
+  │                      │          │                            │
+  │   data:              │          │   fqdn:                    │
+  │     index.html: ""   │          │    <name>.127.0.0.1.nip.io │
+  └──────────────────────┘          └────────────────────────────┘
+```
+
+One of  these for each of:
+
+```yaml
+["apples", "bananas", "strawberries"]
+```
+
+<!-- end_slide -->
+
+
+YTT: "Yaml Templating Tool"
+===
+
+## YAML-patching
+
+Applying "overlays"
+
+<!-- new_lines: 1 -->
+
+## Substitute for `kustomize`
+
+<!-- end_slide -->
+
+
+YTT: "Yaml Templating Tool"
+===
+
+Can work with `helm` and `kustomize`
+
+<!-- new_lines: 1 -->
+
+⏩️ https://carvel.dev/ytt
+
+<!-- new_lines: 1 -->
+
+`$ ytt website`
+
+<!-- end_slide -->
+
+
+The plan
+===
+
+1. What's Carvel?
+1. Create some YAML with `ytt`
+1. **Deploy it with `kapp`**
+1. Make it prod-ready and publish it with `kbld` and `imgpkg`
+1. GitOps and Package Management with `kapp-controller` and `kctrl`
+
+<!-- end_slide -->
+
 
 
 kapp: Friendlier alternative to `kubectl`
@@ -89,28 +197,66 @@ Waits for the resources to become Ready
 
 Order resources, manage dependencies
 
+<!-- end_slide -->
 
+
+The plan
+===
+
+1. What's Carvel?
+1. Create some YAML with `ytt`
+1. Deploy it with `kapp`
+1. **Make it prod-ready and publish it with `kbld` and `imgpkg`**
+1. GitOps and Package Management with `kapp-controller` and `kctrl`
 
 <!-- end_slide -->
 
-kbld + imgpkg for reproducibility
-===
 
-## kbld
+kbld: reproducibility
+===
 
 Resolve image references to their SHA sums
 
 Produce a lock file
 
-<!-- new_lines: 1 -->
+```yaml
+foo: bar
+image: bitnami/nginx:1.25.2
 
-## imgpkg
 
-Bundle configuration together into an OCI image
+# ⏬ kbld ⏬
 
-Relocate bundles and dependencies across repositories
+
+foo: bar
+image: bitnami/nginx@sha256:...
+```
 
 <!-- end_slide -->
+
+
+imgpkg
+===
+
+"tar" & "ftp", but with OCI registries
+
+"bundle" files in a non-runnable OCI image, and push/pull it
+
+-> 📦 Enables "RegistryOps"
+
+<!-- end_slide -->
+
+
+The plan
+===
+
+1. What's Carvel?
+1. Create some YAML with `ytt`
+1. Deploy it with `kapp`
+1. Make it prod-ready and publish it with `kbld` and `imgpkg`
+1. **GitOps and Package Management with `kapp-controller` and `kctrl`**
+
+<!-- end_slide -->
+
 
 kapp-controller: App CRD
 ===
@@ -159,7 +305,6 @@ Through custom resources: `PackageRepository`, `Package`, `PackageInstall`...
 
 Discover and consume packages without Kubernetes resources
 
-
 <!-- end_slide -->
 
 Thank you!
@@ -169,6 +314,7 @@ Thank you!
 <!-- column_layout: [1, 1] -->
 
 <!-- column: 0 -->
+# TODO: qr code
 
 **github.com/Kehrlann/project-carvel-demo**
 
@@ -200,7 +346,10 @@ Thank you!
 
 🌍️ https://garnier.wf
 
+📩️ contact@garnier.wf
+
 <!-- column: 1 -->
+
 
 ## Feedback please 🥺️
 
