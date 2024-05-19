@@ -1,83 +1,88 @@
+#@ load("@ytt:template", "template")
 #@ load("@ytt:data", "data")
 
-#@ def labels():
-app: application-simple
-channel: #@ data.values.channel
-#@ end
-
-
+#@ def app_configmap(app_name, app_html):
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: simple-app
+  name: #@ app_name
   namespace: #@ data.values.namespace
-  annotations:
-    kapp.k14s.io/versioned: ""
 data:
-  TEXT: Hello Kubecon friends!
----
-apiVersion: v1
-kind: Service
-metadata:
-  namespace: #@ data.values.namespace
-  name: simple-app
-spec:
-  ports:
-  - port: 80
-    targetPort: echo-port
-    name: echo-port
-  selector: #@ labels()
+  index.html: #@ app_html
+#@ end
 
+#@ def app_resources(app_name):
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  labels:
+    app: #@ app_name
+  name: #@ app_name
   namespace: #@ data.values.namespace
-  name: simple-app
 spec:
+  replicas: 1
   selector:
-    matchLabels: #@ labels()
+    matchLabels:
+      app: #@ app_name
   template:
     metadata:
-      labels: #@ labels()
+      labels:
+        app: #@ app_name
     spec:
       containers:
-      - name: simple-app
-        image: hashicorp/http-echo:1.0.0
-        args:
-          - -text
-          - $(TEXT)
+      - image: bitnami/nginx:1.25.2
+        name: nginx
+        imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 5678
-          name: echo-port
-        envFrom:
-        - configMapRef:
-            name: simple-app
-
-#@ for/end domain in data.values.domains:
+        - containerPort: 8080
+          name: #@ app_name
+        resources:
+          limits:
+            memory: 20M
+        volumeMounts:
+        - mountPath: /app
+          name: app-data
+      volumes:
+      - name: app-data
+        configMap:
+          name: #@ app_name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: #@ app_name
+  namespace: #@ data.values.namespace
+spec:
+  type: ClusterIP
+  selector:
+    app: #@ app_name
+  ports:
+  - name: #@ app_name
+    port: 8080
+    targetPort: #@ app_name
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: #@ "simple-app-{}".format(domain)
+  name: #@ app_name
   namespace: #@ data.values.namespace
 spec:
   rules:
-  - host: #@ "{}.127.0.0.1.nip.io".format(domain)
+  - host: #@ app_name + ".127.0.0.1.nip.io"
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: simple-app
+            name: #@ app_name
             port:
-              name: echo-port
+              name: #@ app_name
+#@ end
 
-#@ if/end data.values.namespace:
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: #@ data.values.namespace
+#@ for app in data.values.apps:
+--- #@ template.replace(app_configmap(app.name, app.html))
+--- #@ template.replace(app_resources(app.name))
+#@ end
