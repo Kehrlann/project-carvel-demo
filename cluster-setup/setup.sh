@@ -148,6 +148,8 @@ else
   kctrl package repository release --version 1.0.0 --yes
   kctrl package repo add --repository carvel-demo \
     --url kind-registry.local:5000/repositories/carvel:1.0.0 -n installs
+  cd "$SCRIPT_DIR"
+  git checkout -- packaging-apis
   echo "~~ Installing package repository > done"
 fi
 
