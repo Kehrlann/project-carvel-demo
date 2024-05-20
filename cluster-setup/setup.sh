@@ -124,15 +124,6 @@ fi
 # 🥾️ Bootstrap local registry with required
 #    imgpkg bundles
 ############################################
-echo "~~ Relocating package repository to local registry"
-if imgpkg tag resolve -i kind-registry.local:5000/demo/carvel-package-repository:1.0.0 2>/dev/null; then
-  echo "~~ Relocating package repository to local registry > already present, skipping"
-else
-  imgpkg copy --bundle dgarnier963/carvel-package-repository:1.0.0 \
-    --to-repo kind-registry.local:5000/demo/carvel-package-repository
-  echo "~~ Relocating package repository to local registry > done"
-fi
-
 echo "~~ Pushing app config to local registry"
 if imgpkg tag resolve -i kind-registry.local:5000/demo/carvel-app:reference 2>/dev/null; then
   echo "~~ Pushing app config to local registry > already present, skipping"
