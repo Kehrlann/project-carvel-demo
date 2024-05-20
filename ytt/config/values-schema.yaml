@@ -3,6 +3,5 @@
 apps:
   - name: ""
     html: ""
-    public: true
 #@schema/nullable
 namespace: ""
