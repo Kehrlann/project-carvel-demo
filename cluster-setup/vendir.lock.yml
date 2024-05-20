@@ -1,13 +1,15 @@
 apiVersion: vendir.k14s.io/v1alpha1
 directories:
 - contents:
-  - githubRelease:
+  - configDigest: bf5223f703a0d62ccf497796da3cb9aa78f75c8ed9c1a267afe7171562d4d0f3
+    githubRelease:
       tag: v0.50.0
       url: https://api.github.com/repos/carvel-dev/kapp-controller/releases/138862035
     path: .
   path: kapp-controller
 - contents:
-  - git:
+  - configDigest: 3aff8391d38cb5c0fe3c3c089e86f8fb816fcfef3016c481dba180f77cdcb60a
+    git:
       commitTitle: Release version v1.10.0 (#11039)
       sha: dc999d81da6d9258bf448874be5f1f0e2156ec94
       tags:
