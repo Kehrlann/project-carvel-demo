@@ -2,10 +2,10 @@
 apiVersion: imgpkg.carvel.dev/v1alpha1
 images:
 - annotations:
-    kbld.carvel.dev/id: hashicorp/http-echo:1.0.0
+    kbld.carvel.dev/id: bitnami/nginx:1.25.2
     kbld.carvel.dev/origins: |
       - resolved:
-          tag: 1.0.0
-          url: hashicorp/http-echo:1.0.0
-  image: index.docker.io/hashicorp/http-echo@sha256:fcb75f691c8b0414d670ae570240cbf95502cc18a9ba57e982ecac589760a186
+          tag: 1.25.2
+          url: bitnami/nginx:1.25.2
+  image: index.docker.io/bitnami/nginx@sha256:fbd9335f55d83d8aaf9ab1a539b0f2a87b444e8c54f34c9a1ca9d7df15605db4
 kind: ImagesLock
