@@ -1,4 +1,5 @@
 ---
+# run with https://github.com/mfontanini/presenterm
 theme:
   name: catppuccin-latte
   override:
