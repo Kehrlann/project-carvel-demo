@@ -1,6 +1,8 @@
 #@data/values-schema
 ---
-channel: ""
-domains: ["echo"]
+apps:
+  - name: ""
+    html: ""
+    public: true
 #@schema/nullable
 namespace: ""

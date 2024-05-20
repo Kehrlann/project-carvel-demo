@@ -1,6 +1,7 @@
 #! #@data/values-schema
 #! ---
-#! channel: ""
-#! node_ports: [30000]
+#! apps:
+#! - name: ""
+#!   html: ""
 #! #@schema/nullable
 #! namespace: ""
