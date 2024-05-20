@@ -30,11 +30,10 @@ metadata:
   namespace: default
 stringData:
   secret-values.yml: |
-    namespace: demo-ns
-    domains:
-      - first
-      - second
-    channel: release-stable
+    namespace: demo-app
+    apps:
+      - name: pommes
+        html: <h1>Mangez des pommes!</h1>
 
 
 #! Service account that kapp-controller will use to deploy your app
