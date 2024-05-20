@@ -86,3 +86,11 @@ spec:
 --- #@ template.replace(app_configmap(app.name, app.html))
 --- #@ template.replace(app_resources(app.name))
 #@ end
+
+#@ if data.values.namespace:
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: #@ data.values.namespace
+#@ end
