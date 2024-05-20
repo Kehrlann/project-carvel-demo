@@ -151,24 +151,33 @@ echo "~~ Installing package repository"
 if kctrl package repo list -n installs | grep -q "Reconcile succeeded"; then
   echo "~~ Installing package repository > already installed, skipping"
 else
+  cd "$SCRIPT_DIR/../packaging-apis/package"
+  kctrl package release --repo-output "$SCRIPT_DIR/../packaging-apis/repository" --version 1.0.0 --yes
+  cd "$SCRIPT_DIR/../packaging-apis/repository"
+  kctrl package repository release --version 1.0.0 --yes
   kctrl package repo add --repository carvel-demo \
-    --url kind-registry.local:5000/demo/carvel-package-repository:1.0.0 -n installs
+    --url kind-registry.local:5000/repositories/carvel:1.0.0 -n installs
   echo "~~ Installing package repository > done"
 fi
 
 
 ###########################################
-# 🥾️ Bootstrap the cluster by pulling http-echo
+# 🥾️ Bootstrap the cluster by pulling depdencies
 #    this makes for a faster demo
 ###########################################
 ytt -f "$SCRIPT_DIR/../kapp/config" |
   kapp deploy -a bootstrap -f - --yes
 kapp delete -a bootstrap --yes
 
+ytt -f "$SCRIPT_DIR/../kapp/eventual-consistency" |
+  kapp deploy -a bootstrap -f - --yes
+kapp delete -a bootstrap --yes
+
 ##########################################
 # 🖼️ Re-tag images
 ##########################################
-for IMAGE_NAME in hashicorp/http-echo:1.0.0
+# TODO
+for IMAGE_NAME in bitnami/nginx:1.25.2 bitnami/dex:2.37.0 bitnami/oauth2-proxy:7.4.0
 do
   echo "~~ Copying $IMAGE_NAME to local registry"
   docker pull "$IMAGE_NAME"
