@@ -3,12 +3,13 @@ kind: PackageRepository
 metadata:
   annotations:
     kctrl.carvel.dev/repository-version: 1.0.0
-  creationTimestamp: "2024-03-14T16:39:39Z"
-  name: carvel.garnier.wf
+  creationTimestamp: "2024-05-20T14:32:03Z"
+  name: carvel-repo.garnier.wf
+  namespace: installs
 spec:
   fetch:
     imgpkgBundle:
-      image: index.docker.io/dgarnier963/carvel-package-repository@sha256:5fb39deab2298aac206549cd95d023c4095ccdbefcfc376c5486b6df48d2f000
+      image: kind-registry.local:5000/repositories/carvel@sha256:480644429ed888b1010ee42262dfd73ef68aa45439ff3bfb8409b684ddc6c03b
 status:
   conditions: null
   friendlyDescription: ""

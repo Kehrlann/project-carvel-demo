@@ -5,5 +5,5 @@ metadata:
   name: carvel.garnier.wf
 spec:
   displayName: Carvel Demo
-  longDescription: A cool app to showcase Carvel at Kubecon EU 2024
-  shortDescription: Kubecon Carvel Demo
+  longDescription: A cool app to showcase Carvel at Voxxed Brussels 2024
+  shortDescription: VxdBxl Carvel Demo

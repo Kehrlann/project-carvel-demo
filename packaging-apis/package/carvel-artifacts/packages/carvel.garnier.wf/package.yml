@@ -5,14 +5,14 @@ metadata:
   name: carvel.garnier.wf.1.0.0
 spec:
   refName: carvel.garnier.wf
-  releasedAt: "2024-03-14T16:31:30Z"
+  releasedAt: "2024-05-20T14:26:40Z"
   template:
     spec:
       deploy:
       - kapp: {}
       fetch:
       - imgpkgBundle:
-          image: index.docker.io/dgarnier963/carvel-package@sha256:3c22e3c10c061f1fa474af53257f091da2d7817fbbd5ae13ab301a69a0f8bf0d
+          image: kind-registry.local:5000/packages/carvel-demo@sha256:760d802ce8a023aa1be2655e18a2e6bd28b165719df8b04e760880ab72774ed3
       template:
       - ytt:
           paths:
@@ -25,19 +25,21 @@ spec:
     openAPIv3:
       additionalProperties: false
       properties:
-        channel:
-          default: ""
-          description: Sets the channel label on the deployment
-          title: Release channel
-          type: string
-        domains:
+        apps:
           default: []
-          description: Sets the subdomains at which the application will be publicly
-            available
+          description: List of apps that will be created. Each app has a 'name' and
+            an 'html' property.
           items:
-            default: echo
-            type: string
-          title: Subdomains
+            additionalProperties: false
+            properties:
+              html:
+                default: ""
+                type: string
+              name:
+                default: ""
+                type: string
+            type: object
+          title: Apps
           type: array
         namespace:
           default: null

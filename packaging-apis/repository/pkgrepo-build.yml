@@ -1,9 +1,9 @@
 apiVersion: kctrl.carvel.dev/v1alpha1
 kind: PackageRepositoryBuild
 metadata:
-  creationTimestamp: "2024-03-14T10:07:45Z"
-  name: carvel.garnier.wf
+  creationTimestamp: "2024-05-20T14:27:37Z"
+  name: carvel-repo.garnier.wf
 spec:
   export:
     imgpkgBundle:
-      image: dgarnier963/carvel-package-repository
+      image: kind-registry.local:5000/repositories/carvel
