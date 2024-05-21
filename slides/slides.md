@@ -93,9 +93,9 @@ YTT: "Yaml Templating Tool"
 
 ## YAML-based programming
 
-YAML-aware, program written in comments
-
-Any YAML, not just Kubernetes resources!
+- Program written in comments
+- Knows the structure of YAML
+- Any YAML, not just Kubernetes resources!
 
 <!-- new_lines: 1 -->
 
